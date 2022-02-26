@@ -1,6 +1,6 @@
 <?php
 
-add_action( 'wp_head', 'wpdd_load_scripts' );
+add_action( 'wp_head', 'wpdd_load_scripts1' );
 function wpdd_load_scripts1() {
 	wp_print_script_tag(
 		array(
@@ -21,7 +21,7 @@ function wpdd_load_scripts1() {
 
 /** internal */
 
-add_action( 'wp_head', 'wpdd_load_scripts' );
+add_action( 'wp_head', 'wpdd_load_scripts2' );
 function wpdd_load_scripts2() {
 	wp_print_script_tag(
 		array(
@@ -33,7 +33,7 @@ function wpdd_load_scripts2() {
 }
 
 /** conditional */
-add_action( 'wp_head', 'wpdd_load_scripts' );
+add_action( 'wp_head', 'wpdd_load_script3' );
 function wpdd_load_scripts3() {
 	if ( is_singular( 'post' ) || is_page( 'sample-page' ) ) { // load on single posts and a static Page having the slug of "sample-page"
 		wp_print_script_tag(
@@ -46,8 +46,8 @@ function wpdd_load_scripts3() {
 	} // end of if
 }
 
-add_action( 'wp_head', 'wpdd_load_scripts' );
-function wpdd_load_scripts() {
+add_action( 'wp_head', 'wpdd_load_scripts4' );
+function wpdd_load_scripts4() {
 	// if this is NOT the site's static homepage, abort.
 	if ( ! is_front_page() ) {
 		return;

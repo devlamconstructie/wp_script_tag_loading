@@ -12,7 +12,7 @@ function dvc_add_script_to_header($id, $src, ...$options){
 }
 
 /* the rest happens automagically */
-
+/* may want this to happen last, because we mey be dequeueing some stuff. */
 add_action( 'wp_head', 'dvc_load_scripts' );
 function dvc_load_scripts() {
     $script_collection = dvc_get_script_collection();
@@ -40,7 +40,7 @@ function dvc_script_collection($script){
 
 	if (!$script) 
         return $script_collection;
-
+    
     $existing_key = array_search($script['id'], array_column($script_collection, 'id'));        
 	
     if($existing_key){
@@ -52,38 +52,17 @@ function dvc_script_collection($script){
     return $script_collection;
 }
 
-function dvc_is_script_handle_enqueued_or_registered($script){
-   $enqueued = wp_script_is( $script['id'], 'enqueued' );
-   $registered = wp_script_is( $script['id'], 'registered' );
-   return ($enqueued || $registered ) ? true : false ;
-}
-
 function dvc_dequeue_if_enqueued($script){
     $enqueued = wp_script_is( $script['id'], 'enqueued' );
     wp_dequeue_script( $script['id'] );
     return $enqueued;
 }
 
-/*
- * investigate whether we can / need to implement this logic:
- * Typically you want to use async where possible, 
- * then defer then no attribute. Here are some general rules to follow:
-    
-    * async downloads the file during HTML parsing and will pause the HTML parser to execute it when it has finished downloading.
-    * defer downloads the file during HTML parsing and will only execute it after the parser has completed. defer scripts are also guaranteed to execute in the order that they appear in the document.
-
-    If the script is modular and does not rely on any scripts then use async.
-    If the script relies upon or is relied upon by another script then use defer.
-    If the script is small and is relied upon by an async script then use an inline script with no attributes placed above the async scripts.
-    from: https://www.growingwiththeweb.com/2014/02/async-vs-defer-attributes.html
- * 
- */
-
 class Dvc_Script_Tag{
     public $id;
     public $src;
     public $attributes;
-    public $tag;
+    //public $tag;
 
     function __construct($id, $src, ...$options){
         $this->id = $id;
@@ -122,7 +101,6 @@ class Dvc_Script_Tag{
 
         return $attributes_array;
     }
-
 
     public function export_script_attributes(){
         $export =  array(
