@@ -36,7 +36,7 @@ function dvc_add_script_to_collection($script){
 }
 
 function dvc_get_script_collection(){
-    return dvc_managae_script_collection();
+    return dvc_manage_script_collection();
 }
 
 /**
