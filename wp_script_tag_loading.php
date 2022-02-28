@@ -2,10 +2,13 @@
 /** 
  * the objective: allow developers to enqueue scripts with a single line anywhere in their files.
  * 
- * 
- */
-//we may need the option to add a hash.
-//the function you will actually use:
+ * developers can now add single use attributes (like hashes) by simply passing the att as a key/value array.
+ * @example dvc_add_script_to_header('my-script', 'https://www.someurl.tld/some-script.js', 'async', ['integrity'=>'3216gobbledygook'], 'module');
+ * @param string $id a.k.a. the handle. a string representing the script. 
+ * @param string $src the url of the script. 
+ * @param string|array ...$options strings representing argument settings or single item associative arrays with the literal attributes and their values in any order.
+ * recognized strings by default are: async, defer, module, nomodule, autoversion, anonymous, use-credentials.
+*/
 function dvc_add_script_to_header($id, $src, ...$options){
     $script = new Dvc_Script_Tag($id, $src, $options);
     dvc_add_script_to_collection($script->export_script_attributes());
@@ -134,7 +137,7 @@ function dvc_prefill_possible_attributes(){
         'module' => ['type' => 'module'],
         'autoversion' => ['version' => 'dvc_get_file_modified_time_from_src'],
         'anonymous' => ['crossorigin' => 'anonymous'],
-        'use-credentials' => ['crossorigin' => 'use-credentials'],
+        'usecredentials' => ['crossorigin' => 'use-credentials'],
     );
     return $possible_attributes;
 }
